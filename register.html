@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Daftar Smart Wallet</title>
+
+<style>
+body {
+  font-family: 'Segoe UI';
+  background: linear-gradient(135deg, #7fdb9b, #7be79c);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.card {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  width: 300px;
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background: #00020f;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>Daftar</h2>
+
+  <input type="text" id="regUser" placeholder="Username">
+  <input type="password" id="regPass" placeholder="Password">
+
+  <button onclick="register()">Daftar</button>
+
+  <p>Sudah punya akun?</p>
+  <button onclick="window.location.href='index.html'">Login</button>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

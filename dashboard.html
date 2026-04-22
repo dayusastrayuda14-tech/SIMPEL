@@ -104,9 +104,10 @@ th, td {
     <h2>Rp <span id="saldo">0</span></h2>
   </div>
 
+  <!-- WARNING -->
   <div class="card" id="warningBox" style="display:none; background:#ffe5e5; color:red;">
-  <b id="warningText"></b>
-</div>
+    <b id="warningText"></b>
+  </div>
 
   <div class="card">
     <h3>📊 Grafik Keuangan</h3>
@@ -176,7 +177,6 @@ th, td {
 
 let user = localStorage.getItem("loginUser") || "User";
 
-// 🔥 FIX MULTI USER (INI YANG PENTING)
 let transaksiKey = "transaksi_" + user;
 let targetKey = "target_" + user;
 
@@ -209,11 +209,11 @@ function render(){
     } else {
       saldo -= t.jumlah;
       keluar += t.jumlah;
-    }
 
-    if(t.kategori === "keinginan"){
-  totalKeinginan += t.jumlah;
-}
+      if(t.kategori === "keinginan"){
+        totalKeinginan += t.jumlah;
+      }
+    }
 
     tabel.innerHTML += `
     <tr>
@@ -241,21 +241,21 @@ function render(){
   });
 
   renderTarget(saldo);
+
+  // 🔥 FIX UTAMA (warning dipanggil di sini)
+  cekWarning(saldo, masuk, keluar, totalKeinginan);
 }
 
-  cekWarning(saldo, masuk, keluar, totalKeinginan);
-
-  function cekWarning(saldo, masuk, keluar, totalKeinginan){
+// ===== WARNING =====
+function cekWarning(saldo, masuk, keluar, totalKeinginan){
 
   let warning = "";
 
-  // 🔥 kondisi 1: keinginan kebanyakan
-  if(totalKeinginan > keluar * 0.5){
+  if(totalKeinginan > keluar * 0.3){
     warning = "⚠️ Pengeluaran keinginan kamu terlalu tinggi!";
   }
 
-  // 🔥 kondisi 2: saldo menipis
-  if(saldo < masuk * 0.2){
+  if(saldo < masuk * 0.3){
     warning = "⚠️ Saldo kamu mulai menipis!";
   }
 
@@ -270,7 +270,6 @@ function render(){
   }
 }
 
-
 // ===== TARGET =====
 function setTarget(){
 
@@ -282,7 +281,7 @@ function setTarget(){
   targetHistory.push({
     nama,
     target: val,
-    tabungan: 0, // 🔥 tambahan
+    tabungan: 0,
     created: new Date().toLocaleDateString()
   });
 
@@ -293,12 +292,12 @@ function setTarget(){
 
 function renderTarget(saldo){
 
- let box = document.getElementById("targetList");
+  let box = document.getElementById("targetList");
   box.innerHTML = "";
 
   targetHistory.forEach((t,i)=>{
 
-    let progress = (t.tabungan || 0);
+    let progress = t.tabungan || 0;
     let persen = Math.min((progress / t.target) * 100, 100);
     let sisa = t.target - progress;
 
@@ -323,10 +322,9 @@ function renderTarget(saldo){
   });
 }
 
-  function tambahTabungan(i){
+function tambahTabungan(i){
 
-  let input = document.getElementById("nabung"+i).value;
-  let val = parseFloat(input);
+  let val = parseFloat(document.getElementById("nabung"+i).value);
 
   if(!val) return alert("Isi jumlah nabung!");
 
@@ -336,7 +334,6 @@ function renderTarget(saldo){
 
   render();
 }
-
 
 // ===== TRANSAKSI =====
 function simpan(){

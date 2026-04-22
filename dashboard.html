@@ -329,6 +329,10 @@ function renderTarget(saldo){
       <input id="nabung${i}" placeholder="Tambah tabungan"><br>
       <button onclick="tambahTabungan(${i})">💰 Nabung</button>
 
+      <button style="background:red;margin-top:5px;" onclick="hapusTarget(${i})">
+🗑 Hapus Target
+</button>
+
       <br>Dibuat: ${t.created}
     </div>`;
   });
@@ -342,6 +346,26 @@ function tambahTabungan(i){
 
   targetHistory[i].tabungan += val;
 
+  localStorage.setItem(targetKey, JSON.stringify(targetHistory));
+
+  render();
+}
+
+  function hapusTarget(i){
+
+  if(!confirm("Yakin mau hapus target ini?")) return;
+
+  targetHistory.splice(i, 1);
+  localStorage.setItem(targetKey, JSON.stringify(targetHistory));
+
+  render();
+}
+
+  function hapusTarget(i){
+
+  if(!confirm("Yakin mau hapus target ini?")) return;
+
+  targetHistory.splice(i, 1);
   localStorage.setItem(targetKey, JSON.stringify(targetHistory));
 
   render();

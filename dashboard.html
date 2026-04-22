@@ -245,6 +245,7 @@ function setTarget(){
   targetHistory.push({
     nama,
     target: val,
+    tabungan: 0, // 🔥 tambahan
     created: new Date().toLocaleDateString()
   });
 
@@ -255,22 +256,50 @@ function setTarget(){
 
 function renderTarget(saldo){
 
-  let box = document.getElementById("targetList");
+ let box = document.getElementById("targetList");
   box.innerHTML = "";
 
-  targetHistory.forEach((t)=>{
+  targetHistory.forEach((t,i)=>{
 
-    let persen = Math.min((saldo / t.target) * 100, 100);
+    let progress = (t.tabungan || 0);
+    let persen = Math.min((progress / t.target) * 100, 100);
+    let sisa = t.target - progress;
 
     box.innerHTML += `
     <div style="padding:10px;border-bottom:1px solid #ddd;">
       <b>${t.nama}</b><br>
       Target: Rp ${formatRupiah(t.target)}<br>
+      Terkumpul: Rp ${formatRupiah(progress)}<br>
+      Sisa: Rp ${formatRupiah(sisa > 0 ? sisa : 0)}<br>
+
+      <div style="background:#ddd;border-radius:10px;height:10px;margin:5px 0;">
+        <div style="width:${persen}%;background:green;height:10px;border-radius:10px;"></div>
+      </div>
+
       Progress: ${persen.toFixed(0)}%<br>
-      Dibuat: ${t.created}
+
+      <input id="nabung${i}" placeholder="Tambah tabungan"><br>
+      <button onclick="tambahTabungan(${i})">💰 Nabung</button>
+
+      <br>Dibuat: ${t.created}
     </div>`;
   });
 }
+
+  function tambahTabungan(i){
+
+  let input = document.getElementById("nabung"+i).value;
+  let val = parseFloat(input);
+
+  if(!val) return alert("Isi jumlah nabung!");
+
+  targetHistory[i].tabungan += val;
+
+  localStorage.setItem(targetKey, JSON.stringify(targetHistory));
+
+  render();
+}
+
 
 // ===== TRANSAKSI =====
 function simpan(){
